@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Access Portal</title>
+
+<style>
+    :root {
+        --primary: #4e54c8;
+        --secondary: #8f94fb;
+        --glass: rgba(255, 255, 255, 0.1);
+        --text: #ffffff;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* Darker, moody background */
+        background: linear-gradient(to right, #0f2027, #203a43, #2c5364); 
+        overflow: hidden;
+    }
+
+    .background-shape {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        z-index: -1;
+    }
+    .shape-1 {
+        width: 300px;
+        height: 300px;
+        background: var(--primary);
+        top: -50px;
+        left: -50px;
+    }
+    .shape-2 {
+        width: 300px;
+        height: 300px;
+        background: var(--secondary);
+        bottom: -50px;
+        right: -50px;
+    }
+
+    .card {
+        width: 350px;
+        padding: 40px;
+        border-radius: 15px;
+        /* Glassmorphism Effect */
+        background: var(--glass);
+        backdrop-filter: blur(10px); 
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+        color: var(--text);
+        position: relative;
+    }
+
+    .form-section {
+        /* Default state: visible */
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        position: relative;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    h2 {
+        margin-bottom: 30px;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+
+    .input-box {
+        position: relative;
+        margin-bottom: 30px;
+    }
+
+    .input-box input {
+        width: 100%;
+        padding: 10px 0;
+        font-size: 16px;
+        color: #fff;
+        border: none;
+        border-bottom: 1px solid #fff;
+        outline: none;
+        background: transparent;
+    }
+
+    /* Floating Label Logic */
+    .input-box label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 10px 0;
+        font-size: 16px;
+        color: rgba(255,255,255,0.7);
+        pointer-events: none;
+        transition: 0.3s;
+    }
+
+   
+    .input-box input:focus ~ label,
+    .input-box input:valid ~ label {
+        top: -20px;
+        left: 0;
+        color: var(--secondary);
+        font-size: 12px;
+    }
+
+    button {
+        background: #fff;
+        color: #333;
+        border: none;
+        padding: 10px 20px;
+        width: 100%;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background: var(--secondary);
+        color: #fff;
+        box-shadow: 0 0 10px var(--secondary);
+    }
+
+    .switch-text {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: rgba(255,255,255,0.7);
+    }
+
+    .switch-text span {
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .toggle-pw {
+        position: absolute;
+        right: 0;
+        top: 10px;
+        cursor: pointer;
+        font-size: 12px;
+        color: rgba(255,255,255,0.5);
+    }
+</style>
+</head>
+<body>
+
+    <div class="background-shape shape-1"></div>
+    <div class="background-shape shape-2"></div>
+
+    <div class="card">
+        
+        <form id="loginForm" class="form-section">
+            <h2>Login</h2>
+            
+            <div class="input-box">
+                <input type="email" required>
+                <label>Email</label>
+            </div>
+            
+            <div class="input-box">
+                <input type="password" id="loginPass" required>
+                <label>Password</label>
+                <span class="toggle-pw" onclick="togglePw('loginPass')">👁️</span>
+            </div>
+
+            <button type="submit">Submit</button>
+            
+            <div class="switch-text">
+                Don't have an account? <span onclick="switchForm('signup')">Register</span>
+            </div>
+        </form>
+
+        <form id="signupForm" class="form-section hidden">
+            <h2>Register</h2>
+
+            <div class="input-box">
+                <input type="text" required>
+                <label>Username</label>
+            </div>
+            
+            <div class="input-box">
+                <input type="email" required>
+                <label>Email</label>
+            </div>
+            
+            <div class="input-box">
+                <input type="password" id="signPass" required>
+                <label>Password</label>
+                <span class="toggle-pw" onclick="togglePw('signPass')">👁️</span>
+            </div>
+
+            <button type="submit">Start Journey</button>
+            
+            <div class="switch-text">
+                Already a member? <span onclick="switchForm('login')">Login</span>
+            </div>
+        </form>
+
+    </div>
+
+<script>
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+
+    // Function to switch between Login and Signup
+    function switchForm(target) {
+        if(target === 'signup') {
+            loginForm.classList.add('hidden');
+            signupForm.classList.remove('hidden');
+        } else {
+            signupForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        }
+    }
+
+    // Function to toggle password visibility
+    function togglePw(id) {
+        const input = document.getElementById(id);
+        if (input.type === "password") {
+            input.type = "text";
+        } else {
+            input.type = "password";
+        }
+    }
+
+    // Demo Submission handlers
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Welcome back! (Glass Demo)');
+    });
+
+    signupForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Registration successful! (Glass Demo)');
+    });
+</script>
+
+</body>
+</html>
